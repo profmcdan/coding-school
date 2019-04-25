@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import uuidv4 from "uuid/v4";
 import propTypes from "prop-types";
 import { createCourse } from "../../redux/actions/courseActions";
 
 class CoursesPage extends Component {
   state = {
     title: "",
-    courses: null,
+    courses: [],
   };
 
   handleChange = e => {
@@ -17,16 +18,19 @@ class CoursesPage extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { title } = this.state;
-    const course = { title };
-    this.props.dispatch(createCourse(course));
+    const id = uuidv4();
+    this.props.createCourse({ title, id });
     this.setState({ title: "" });
   };
   render() {
-    const { title, courses } = this.state;
+    const { title } = this.state;
+    const { courses } = this.props;
     return (
       <div>
         <h2 className="mt-3">Courses</h2>
-        {courses && courses.map(course => <li>{course.title}</li>)}
+        {courses.map(course => (
+          <li>{course.title}</li>
+        ))}
         <form onSubmit={this.handleSubmit}>
           <h3>Add Course</h3>
           <div className="form-group">
@@ -51,15 +55,22 @@ class CoursesPage extends Component {
 }
 
 CoursesPage.propTypes = {
-  dispatch: propTypes.func.isRequired,
+  createCourse: propTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
   return {
-    courses: state.courses,
+    courses: state.courses.courses,
   };
 };
 
-// const mapDispatchToProps = () => {};
+const mapDispatchToProps = dispatch => {
+  return {
+    createCourse: course => dispatch(createCourse(course)),
+  };
+};
 
-export default connect(mapStateToProps)(CoursesPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CoursesPage);
