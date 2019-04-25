@@ -29,7 +29,7 @@ class CoursesPage extends Component {
       <div>
         <h2 className="mt-3">Courses</h2>
         {courses.map(course => (
-          <li>{course.title}</li>
+          <li key={course.id}>{course.title}</li>
         ))}
         <form onSubmit={this.handleSubmit}>
           <h3>Add Course</h3>
@@ -55,6 +55,7 @@ class CoursesPage extends Component {
 }
 
 CoursesPage.propTypes = {
+  courses: propTypes.array.isRequired,
   createCourse: propTypes.func.isRequired,
 };
 
