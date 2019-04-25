@@ -1,4 +1,4 @@
-import { CREATE_COURSE } from "../constants";
+import { CREATE_COURSE } from "./actionTypes";
 
 export const createCourse = course => {
   return { type: CREATE_COURSE, payload: course };

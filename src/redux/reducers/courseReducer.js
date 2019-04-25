@@ -1,4 +1,4 @@
-import { CREATE_COURSE } from "../constants";
+import { CREATE_COURSE } from "../actions/actionTypes";
 
 const initialState = {
   courses: [],
