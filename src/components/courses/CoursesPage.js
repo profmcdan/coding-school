@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import uuidv4 from "uuid/v4";
 import propTypes from "prop-types";
-import { createCourse } from "../../redux/actions/courseActions";
+import * as createActions from "../../redux/actions/courseActions";
 
 class CoursesPage extends Component {
   state = {
@@ -19,7 +20,7 @@ class CoursesPage extends Component {
     e.preventDefault();
     const { title } = this.state;
     const id = uuidv4();
-    this.props.createCourse({ title, id });
+    this.props.actions.createCourse({ title, id });
     this.setState({ title: "" });
   };
   render() {
@@ -29,7 +30,7 @@ class CoursesPage extends Component {
       <div>
         <h2 className="mt-3">Courses</h2>
         {courses.map(course => (
-          <li>{course.title}</li>
+          <li key={course.id}>{course.title}</li>
         ))}
         <form onSubmit={this.handleSubmit}>
           <h3>Add Course</h3>
@@ -55,7 +56,8 @@ class CoursesPage extends Component {
 }
 
 CoursesPage.propTypes = {
-  createCourse: propTypes.func.isRequired,
+  courses: propTypes.array.isRequired,
+  actions: propTypes.object.isRequired,
 };
 
 const mapStateToProps = state => {
@@ -66,7 +68,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    createCourse: course => dispatch(createCourse(course)),
+    actions: bindActionCreators(createActions, dispatch),
   };
 };
 
